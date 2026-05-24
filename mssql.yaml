@@ -1,0 +1,32 @@
+# Docker compose for MSSQL Server - Market Intelligence Project
+version: '3.9'
+
+services:
+  mssql-server: 
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    container_name: marketIntelligence_mssql-server
+    environment: 
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "${MSSQL_SA_PASSWORD}"
+      MSSQL_PID: "Developer"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+      # - /home/bishalkoirala/Desktop/marketIntelligence/data:ro
+    restart: unless-stopped
+
+volumes:
+  mssql-data:
+    name: marketIntelligence-mssql-data
+
+
+# To Start
+# docker compose -f mssql.yaml up -d
+
+#check it' healthy
+#docker ps 
+#docker logs marketIntelligence_mssql_server
+
+#must create first
+# mkdir -p /home/bishalkoirala/Desktop/marketIntelligence/data
