@@ -8,23 +8,29 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Load .env from project root
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 from src.dbconnect import execute_sql_file
+from src.config import DATABASE_CONFIG
+
 # Optional 1: Use environment variable (recommended)
 password = os.getenv('MSSQL_SA_PASSWORD')
 if not password:
     raise ValueError("MSSQL_SA_PASSWORD not set in environment")
 
+mssql = DATABASE_CONFIG['mssql-database']
+
 
 #Connecting string using Driver 18
 conn_str = (
-    f"DRIVER={{ODBC Driver 18 for SQL Server}};"
-    f"SERVER=localhost,1433;"
-    f"DATABASE=master;"
-    f"UID=sa;"
-    f"PWD={password};"
+    f"DRIVER={mssql['driver']};"
+    f"SERVER={mssql['server']},{mssql['port']};"
+    f"DATABASE={mssql['database']};"
+    f"UID={mssql['username']};"
+    f"PWD={mssql['password']};"
     f"TrustServerCertificate=yes;"
 )
 
-sql_path = './tests/scripts/test.sql'
+
+# ✅ Simple relative path
+sql_path = 'scripts/test_executePath.sql'
 
 if __name__ == "__main__":
     print(datetime.datetime.now())

@@ -20,8 +20,9 @@ def execute_sql_file(conn_str, sql_file_path):
 
         with open(sql_file_path, 'r', encoding='utf-8') as file:
             sql_script = file.read()
-    except FileNotFoundError:
-        print("File not found:")
+    except FileNotFoundError as e:
+        print(f"File not found: {sql_file_path}")
+        print(f"Full error: {e}")
         return
     
     sql_script = remove_sql_comments(sql_script)
