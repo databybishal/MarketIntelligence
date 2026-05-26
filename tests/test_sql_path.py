@@ -3,12 +3,14 @@ import os
 from dotenv import load_dotenv
 import datetime
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+
 
 # Load .env from project root
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
-from src.dbconnect import execute_sql_file
-from src.config import DATABASE_CONFIG
+
+#importing the 
+from src import execute_sql_file, DATABASE_CONFIG
 
 # Optional 1: Use environment variable (recommended)
 password = os.getenv('MSSQL_SA_PASSWORD')
@@ -30,7 +32,7 @@ conn_str = (
 
 
 # ✅ Simple relative path
-sql_path = 'scripts/test_executePath.sql'
+sql_path = 'tests/scripts/test_executePath.sql'
 
 if __name__ == "__main__":
     print(datetime.datetime.now())
