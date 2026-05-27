@@ -4,9 +4,7 @@ import sys
 import datetime
 from dotenv import load_dotenv
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from src import execute_sql_file
-from utils import removeSqlComments
+
 
 
 #Load env 
