@@ -16,3 +16,4 @@ source = {
         'api': f'https://www.alphavantage.co/query?function={function}&symbol={symbol}&interval={interval}&apikey={stock_price_api_key}',
     },
 }
+

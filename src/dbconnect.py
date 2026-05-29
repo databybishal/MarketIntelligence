@@ -7,15 +7,6 @@ from utils.removeSqlComments import remove_sql_comments
 
 def execute_sql_file(conn_str, sql_file_path):
 
-    """
-    Reads a .sql.file and executes its content.
-
-    Args:
-        conn_str = ODBC connection string
-        sql_file_path: path to the .sql file(e.g., 'script/create_tables.sql')
-    """
-
-    #Read teh SQL_file
     try:
 
         with open(sql_file_path, 'r', encoding='utf-8') as file:
@@ -50,3 +41,4 @@ def execute_sql_file(conn_str, sql_file_path):
         raise
     finally:
         conn.close()
+        

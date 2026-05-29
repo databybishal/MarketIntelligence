@@ -1,0 +1,3 @@
+USE MarketIntelligenceDWH;
+GO
+
