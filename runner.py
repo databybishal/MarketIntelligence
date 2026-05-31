@@ -35,11 +35,15 @@ if __name__ == '__main__':
         log.info("Running: bronze_table")
         execute_sql_file(conn_str, SQL_SCRIPTS['bronze_table'])
         log.info("Completed: bronze_table")
-        
+
         log.info("All scripts completed successfully")
     except Exception as e:
         log.error(f"Script failed: {e}", exc_info=True)
         raise
+
+        #Data Ingesion on bronze layer
+        log.info("Ingestining: data into Bronze layer")
+        
 
 
 
