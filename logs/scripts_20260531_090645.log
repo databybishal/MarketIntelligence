@@ -1,0 +1,53 @@
+2026-05-31 09:06:45,421 - INFO -Batch 1:
+USE master;
+
+2026-05-31 09:06:45,422 - INFO -Batch 1 OK
+2026-05-31 09:06:45,422 - INFO -Batch 2:
+IF EXISTS(SELECT 1 FROM sys.databases WHERE name = 'MarketIntelligenceDWH')
+BEGIN
+    ALTER DATABASE MarketIntelligenceDWH
+    SET SINGLE_USER
+    WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE MarketIntelligenceDWH;
+END;
+CREATE DATABASE MarketIntelligenceDWH;
+
+2026-05-31 09:06:45,817 - INFO -Batch 2 OK
+2026-05-31 09:06:45,817 - INFO -Batch 3:
+USE MarketIntelligenceDWH;
+
+2026-05-31 09:06:45,819 - INFO -Batch 3 OK
+2026-05-31 09:06:45,819 - INFO -Batch 4:
+CREATE SCHEMA bronze;
+
+2026-05-31 09:06:45,822 - INFO -Batch 4 OK
+2026-05-31 09:06:45,822 - INFO -Batch 5:
+CREATE SCHEMA silver;
+
+2026-05-31 09:06:45,825 - INFO -Batch 5 OK
+2026-05-31 09:06:45,825 - INFO -Batch 6:
+CREATE SCHEMA gold;
+
+2026-05-31 09:06:45,827 - INFO -Batch 6 OK
+2026-05-31 09:06:45,827 - INFO -All batches executed successfully.
+2026-05-31 09:06:45,827 - INFO -Batch 1:
+USE MarketIntelligenceDWH;
+
+2026-05-31 09:06:45,828 - INFO -Batch 1 OK
+2026-05-31 09:06:45,828 - INFO -Batch 2:
+IF OBJECT_ID('bronze.IBM_stock_price_data', 'U') IS NOT NULL
+    DROP TABLE bronze.IBM_stock_price_data;
+
+2026-05-31 09:06:45,830 - INFO -Batch 2 OK
+2026-05-31 09:06:45,830 - INFO -Batch 3:
+CREATE TABLE bronze.IBM_stock_price_data (
+    [date] NVARCHAR(50),
+    [open] NVARCHAR(50),
+    [high] NVARCHAR(50),
+    [low] NVARCHAR(50),
+    [close] NVARCHAR(50),
+    [volume] NVARCHAR(50)
+);
+
+2026-05-31 09:06:45,833 - INFO -Batch 3 OK
+2026-05-31 09:06:45,833 - INFO -All batches executed successfully.

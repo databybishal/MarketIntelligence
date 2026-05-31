@@ -31,7 +31,7 @@ GO
 CREATE SCHEMA bronze;
 GO
 
-CREATE SCHEMA sliver;
+CREATE SCHEMA silver;
 GO
 
 CREATE SCHEMA gold;

@@ -1,10 +1,7 @@
-import datetime
-import pandas as pd
-from dotenv import load_dotenv
-
-# sys.path.insert(os.path.join(os.path.dirname(__file__), ')
-# load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+from utils.log import runner_logger as log
 from src import DATABASE_CONFIG, execute_sql_file
+from datetime import datetime
+
 
 mssql_db = DATABASE_CONFIG['mssql-database']
 
@@ -17,35 +14,34 @@ conn_str = (
     "TrustServerCertificate=YES;"
 )
 
+SQL_SCRIPTS = {
+    'init_database': './scripts/init_database.sql',
+    'bronze_table': './scripts/bronze/bronze_tables.sql'
+}
+
+
 if __name__ == '__main__':
-
-        #############################################################
-    # Script: Setup DataWarehouse Database
-    # Description: Drops and recreates the 'MarketIntelligenceDWH' database
-    #              and creates the bronze, silver, and gold schemas.
-    # WARNING: Running this script will permanently delete the existing
-    #          DataWarehouse database if it exists.
-    #############################################################
-    init_database = './scripts/init_database.sql'
-    print(datetime.datetime.today())
-    execute_sql_file(conn_str, init_database)
+    log.info("Starting Datawarehouse setup...")
+        
+    try:
+        # Init Database
+        log.info("Running: init_database")
+        execute_sql_file(conn_str, SQL_SCRIPTS['init_database'])
+        log.info("Completed: init_database")
 
 
 
+        #Bronze layer
+        log.info("Running: bronze_table")
+        execute_sql_file(conn_str, SQL_SCRIPTS['bronze_table'])
+        log.info("Completed: bronze_table")
+        
+        log.info("All scripts completed successfully")
+    except Exception as e:
+        log.error(f"Script failed: {e}", exc_info=True)
+        raise
 
-        #############################################################
-    # Script: Bronze Layer - IBM Stock Price Table
-    # Description: Drops (if exists) and recreates the
-    #              'bronze.IBM_stock_price_data' table in the
-    #              MarketIntelligenceDWH database.
-    # WARNING: Running this script will permanently delete the
-    #          existing table and all its data if it exists.
-    #############################################################
-    bronze_table = './scripts/bronze/bronze_tables.sql'
-    print(datetime.datetime.today())
-    execute_sql_file(conn_str, bronze_table)
 
-    
 
 
 

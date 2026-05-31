@@ -9,7 +9,7 @@
 USE MarketIntelligenceDWH;
 GO
 
-IF OBJECT_ID('bronze.IBM_stock_price_data') IS NOT NULL
+IF OBJECT_ID('bronze.IBM_stock_price_data', 'U') IS NOT NULL
     DROP TABLE bronze.IBM_stock_price_data;
 GO
 
