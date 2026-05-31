@@ -1,6 +1,8 @@
 from utils.log import runner_logger as log
 from src import DATABASE_CONFIG, execute_sql_file
+from src.data_ingestion import run
 from datetime import datetime
+
 
 
 mssql_db = DATABASE_CONFIG['mssql-database']
@@ -37,10 +39,11 @@ if __name__ == '__main__':
         log.info("Completed: bronze_table")
 
 
-        #Data Ingesion on bronze layer
+        # Data Ingesting into bronze layer
         log.info("Ingestining: data into Bronze layer")
+        run(conn_str)
 
-        
+
 
         log.info("All scripts completed successfully")
     except Exception as e:

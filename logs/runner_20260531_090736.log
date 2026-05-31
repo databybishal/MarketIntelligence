@@ -1,6 +1,0 @@
-2026-05-31 09:07:36,501 - INFO -Starting Datawarehouse setup...
-2026-05-31 09:07:36,501 - INFO -Running: init_database
-2026-05-31 09:07:37,226 - INFO -Completed: init_database
-2026-05-31 09:07:37,226 - INFO -Running: bronze_table
-2026-05-31 09:07:37,237 - INFO -Completed: bronze_table
-2026-05-31 09:07:37,242 - INFO -All scripts completed successfully

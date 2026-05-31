@@ -2,19 +2,19 @@ import os
 import sys
 import logging
 import pandas as pd
-from apiSource.data_source import source
+from .apiSource.data_source import source
+import pyodbc
 
+# Add project root to path so apiSource can be found
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils import extractApis 
+from utils.log import ingestion_logger as log
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
-from utils import extractApis
-
-
-log = logging.getLogger('ingestion')
 api = source['stock_price_apis']['api']
 
-if __name__ == '__main__':
+def run(conn_str):
     try:
-        log.info("Preparing for data ingestion")
+        log.info("Fetching data from API source")
         data = extractApis(api)
         time_series = data['Time Series (Daily)']
         df = pd.DataFrame(
@@ -30,10 +30,21 @@ if __name__ == '__main__':
                 for date, value in time_series.items()
             ]
         )
-        print(df.head())
+        with pyodbc.connect(conn_str) as conn:
+            cursor = conn.cursor()
+            cursor.execute("USE MarketIntelligenceDWH")
+            cursor.executemany(
+                """
+                INSERT INTO bronze.IBM_stock_price ([date], [open], [high], [low], [close], [volume])
+                VALUES(?, ?, ?, ?, ?, ?)
+                """,
+                df.values.tolist()
+            )
+            conn.commit()
+        log.info(f"Ingested {len(df)} rows into bronze.IBM_stock_price")
     except Exception as e:
-        pass
-    
+        log.exception(f"Ingestion failed: {e}")
+        raise
 
 
 
