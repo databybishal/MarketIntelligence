@@ -1,0 +1,16 @@
+2026-06-01 11:04:54,196 - INFO -Starting Datawarehouse setup...
+2026-06-01 11:04:54,196 - INFO -Running: init_database
+2026-06-01 11:04:54,957 - INFO -Completed: init_database
+2026-06-01 11:04:54,958 - INFO -Running: bronze_table
+2026-06-01 11:04:55,240 - INFO -Completed: bronze_table
+2026-06-01 11:04:55,240 - INFO -Ingestining: data into Bronze layer
+2026-06-01 11:04:56,768 - INFO -Running: silver_table
+2026-06-01 11:04:56,771 - ERROR -Script failed: ('42000', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Incorrect syntax near 'open'. (102) (SQLExecDirectW)")
+Traceback (most recent call last):
+  File "/home/bishalkoirala/Desktop/MarketIntelligence/runner.py", line 54, in <module>
+    execute_sql_file(conn_str, SQL_SCRIPTS['silver_table'])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bishalkoirala/Desktop/MarketIntelligence/src/dbconnect.py", line 28, in execute_sql_file
+    cursor.execute(batch)
+    ~~~~~~~~~~~~~~^^^^^^^
+pyodbc.ProgrammingError: ('42000', "[42000] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Incorrect syntax near 'open'. (102) (SQLExecDirectW)")

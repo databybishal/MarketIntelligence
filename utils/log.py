@@ -7,7 +7,7 @@ log_dir = "logs"
 os.makedirs(log_dir, exist_ok=True)
 
 def cleanup_logs(keep=5):
-    for prefix in ["runner", "scripts", "ingestion"]:
+    for prefix in ["runner", "scripts", "ingestion", "transformation"]:
         files = sorted(glob.glob(os.path.join(log_dir, f"{prefix}_*.log")))
         for f in files[:-keep]:
             os.remove(f)
@@ -42,3 +42,9 @@ ingestion_logger.addHandler(_file_handler(f"ingestion_{today}.log"))
 ingestion_logger.addHandler(logging.StreamHandler())
 ingestion_logger.propagate = False
 
+#transformation logger
+transformation_logger = logging.getLogger("transformation")
+transformation_logger.setLevel(logging.INFO)
+transformation_logger.addHandler(_file_handler(f"transformation_{today}.log"))
+transformation_logger.addHandler(logging.StreamHandler())
+transformation_logger.propagate = False
