@@ -1,6 +1,6 @@
 from utils.log import runner_logger as log
 from src import DATABASE_CONFIG, execute_sql_file
-from src.data_ingestion import run
+from src.data_ingestion import data_ingestion_run
 from datetime import datetime
 
 
@@ -18,7 +18,8 @@ conn_str = (
 
 SQL_SCRIPTS = {
     'init_database': './scripts/init_database.sql',
-    'bronze_table': './scripts/bronze/bronze_tables.sql'
+    'bronze_table': './scripts/bronze/bronze_tables.sql',
+    'silver_table': './scripts/silver/silver_table.sql'
 }
 
 
@@ -28,7 +29,10 @@ if __name__ == '__main__':
     try:
         # Init Database
         log.info("Running: init_database")
-        execute_sql_file(conn_str, SQL_SCRIPTS['init_database'])
+        master_conn_str = conn_str.replace(
+        f"DATABASE={mssql_db['database']};",
+        "DATABASE=master;")
+        execute_sql_file(master_conn_str, SQL_SCRIPTS['init_database'])
         log.info("Completed: init_database")
 
 
@@ -41,8 +45,21 @@ if __name__ == '__main__':
 
         # Data Ingesting into bronze layer
         log.info("Ingestining: data into Bronze layer")
-        run(conn_str)
+        data_ingestion_run(conn_str)
 
+
+        #Silver layer
+        log.info("Running: silver_table")
+        execute_sql_file(conn_str, SQL_SCRIPTS['silver_table'])
+        log.info("Completed: silver_table")
+
+        # Transforming the data in silver layer
+        log.info("Transformation: transformation data into Silver layer")
+        
+        log.info("Completed: Transformation silver layer")
+
+
+        
 
 
         log.info("All scripts completed successfully")

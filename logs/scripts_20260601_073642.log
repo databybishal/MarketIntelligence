@@ -1,0 +1,68 @@
+2026-06-01 07:36:42,683 - INFO -Batch 1:
+USE master;
+
+2026-06-01 07:36:42,684 - INFO -Batch 1 OK
+2026-06-01 07:36:42,684 - INFO -Batch 2:
+IF EXISTS(SELECT 1 FROM sys.databases WHERE name = 'MarketIntelligenceDWH')
+BEGIN
+    ALTER DATABASE MarketIntelligenceDWH
+    SET SINGLE_USER
+    WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE MarketIntelligenceDWH;
+END;
+CREATE DATABASE MarketIntelligenceDWH;
+
+2026-06-01 07:36:46,138 - INFO -Batch 2 OK
+2026-06-01 07:36:46,138 - INFO -Batch 3:
+USE MarketIntelligenceDWH;
+
+2026-06-01 07:36:46,139 - INFO -Batch 3 OK
+2026-06-01 07:36:46,139 - INFO -Batch 4:
+CREATE SCHEMA bronze;
+
+2026-06-01 07:36:46,142 - INFO -Batch 4 OK
+2026-06-01 07:36:46,142 - INFO -Batch 5:
+CREATE SCHEMA silver;
+
+2026-06-01 07:36:46,145 - INFO -Batch 5 OK
+2026-06-01 07:36:46,145 - INFO -Batch 6:
+CREATE SCHEMA gold;
+
+2026-06-01 07:36:46,148 - INFO -Batch 6 OK
+2026-06-01 07:36:46,148 - INFO -All batches executed successfully.
+2026-06-01 07:36:46,330 - INFO -Batch 1:
+IF OBJECT_ID('bronze.IBM_stock_price', 'U') IS NOT NULL
+    DROP TABLE bronze.IBM_stock_price;
+
+2026-06-01 07:36:46,331 - INFO -Batch 1 OK
+2026-06-01 07:36:46,331 - INFO -Batch 2:
+CREATE TABLE bronze.IBM_stock_price (
+    [date] NVARCHAR(50),
+    [open] NVARCHAR(50),
+    [high] NVARCHAR(50),
+    [low] NVARCHAR(50),
+    [close] NVARCHAR(50),
+    [volume] NVARCHAR(50)
+);
+
+2026-06-01 07:36:46,334 - INFO -Batch 2 OK
+2026-06-01 07:36:46,334 - INFO -All batches executed successfully.
+2026-06-01 07:36:47,938 - INFO -Batch 1:
+IF OBJECT_ID('silver.IBM_stock_price', 'U') IS NOT NULL
+    DROP TABLE silver.IBM_stock_price;
+
+2026-06-01 07:36:47,939 - INFO -Batch 1 OK
+2026-06-01 07:36:47,939 - INFO -Batch 2:
+CREATE TABLE silver.IBM_stock_price(
+    id              INT,
+    [open]          DECIMAL(10, 4),
+    [high]          DECIMAL(10, 4),
+    [low]           DECIMAL(10, 4),
+    [close]         DECIMAL(10, 4),
+    [volume]        BIGINT,
+    [date]          DATE,
+    dwh_create_date DATETIME2 DEFAULT GETDATE()
+);
+
+2026-06-01 07:36:47,942 - INFO -Batch 2 OK
+2026-06-01 07:36:47,942 - INFO -All batches executed successfully.

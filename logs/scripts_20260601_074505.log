@@ -1,0 +1,100 @@
+2026-06-01 07:45:06,234 - INFO -Batch 1:
+/********************************************************************
+-- Script: Setup DataWarehouse Database
+-- Description: Drops and recreates the 'MarketIntelligenceDWH' database
+--              and creates the bronze, silver, and gold schemas.
+-- WARNING: Running this script will permanently delete the existing
+--          DataWarehouse database if it exists.
+********************************************************************/
+
+-- Switch to master database to manage databases
+USE master;
+
+2026-06-01 07:45:06,235 - INFO -Batch 1 OK
+2026-06-01 07:45:06,235 - INFO -Batch 2:
+-- Drop existing DataWarehouse database if it exists
+IF EXISTS(SELECT 1 FROM sys.databases WHERE name = 'MarketIntelligenceDWH')
+BEGIN
+    ALTER DATABASE MarketIntelligenceDWH
+    SET SINGLE_USER
+    WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE MarketIntelligenceDWH;
+END;
+
+-- Create a new DataWarehouse database
+CREATE DATABASE MarketIntelligenceDWH;
+
+2026-06-01 07:45:09,684 - INFO -Batch 2 OK
+2026-06-01 07:45:09,685 - INFO -Batch 3:
+-- Switch to the new database
+USE MarketIntelligenceDWH;
+
+2026-06-01 07:45:09,685 - INFO -Batch 3 OK
+2026-06-01 07:45:09,685 - INFO -Batch 4:
+-- Create ETL layer schemas
+CREATE SCHEMA bronze;
+
+2026-06-01 07:45:09,688 - INFO -Batch 4 OK
+2026-06-01 07:45:09,688 - INFO -Batch 5:
+CREATE SCHEMA silver;
+
+2026-06-01 07:45:09,690 - INFO -Batch 5 OK
+2026-06-01 07:45:09,690 - INFO -Batch 6:
+CREATE SCHEMA gold;
+
+2026-06-01 07:45:09,692 - INFO -Batch 6 OK
+2026-06-01 07:45:09,692 - INFO -All batches executed successfully.
+2026-06-01 07:45:09,870 - INFO -Batch 1:
+/********************************************************************
+-- Script: Bronze Layer - IBM Stock Price Table
+-- Description: Drops (if exists) and recreates the
+--              'bronze.IBM_stock_price_data' table in the
+--              MarketIntelligenceDWH database.
+-- WARNING: Running this script will permanently delete the
+--          existing table and all its data if it exists.
+********************************************************************/
+
+IF OBJECT_ID('bronze.IBM_stock_price', 'U') IS NOT NULL
+    DROP TABLE bronze.IBM_stock_price;
+
+2026-06-01 07:45:09,870 - INFO -Batch 1 OK
+2026-06-01 07:45:09,870 - INFO -Batch 2:
+CREATE TABLE bronze.IBM_stock_price (
+    [date] NVARCHAR(50),
+    [open] NVARCHAR(50),
+    [high] NVARCHAR(50),
+    [low] NVARCHAR(50),
+    [close] NVARCHAR(50),
+    [volume] NVARCHAR(50)
+);
+
+2026-06-01 07:45:09,873 - INFO -Batch 2 OK
+2026-06-01 07:45:09,874 - INFO -All batches executed successfully.
+2026-06-01 07:45:11,270 - INFO -Batch 1:
+/********************************************************************
+-- Script: silver Layer - IBM Stock Price Table
+-- Description: Drops (if exists) and recreates the
+--              'silver.IBM_stock_price_data' table in the
+--              MarketIntelligenceDWH database.
+-- WARNING: Running this script will permanently delete the
+--          existing table and all its data if it exists.
+********************************************************************/
+
+IF OBJECT_ID('silver.IBM_stock_price', 'U') IS NOT NULL
+    DROP TABLE silver.IBM_stock_price;
+
+2026-06-01 07:45:11,271 - INFO -Batch 1 OK
+2026-06-01 07:45:11,271 - INFO -Batch 2:
+CREATE TABLE silver.IBM_stock_price(
+    id              INT,
+    [open]          DECIMAL(10, 4),
+    [high]          DECIMAL(10, 4),
+    [low]           DECIMAL(10, 4),
+    [close]         DECIMAL(10, 4),
+    [volume]        BIGINT,
+    [date]          DATE,
+    dwh_create_date DATETIME2 DEFAULT GETDATE()
+);
+
+2026-06-01 07:45:11,273 - INFO -Batch 2 OK
+2026-06-01 07:45:11,273 - INFO -All batches executed successfully.

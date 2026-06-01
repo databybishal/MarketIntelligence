@@ -12,7 +12,7 @@ from utils.log import ingestion_logger as log
 
 api = source['stock_price_apis']['api']
 
-def run(conn_str):
+def data_ingestion_run(conn_str):
     try:
         log.info("Fetching data from API source")
         data = extractApis(api)
@@ -32,7 +32,6 @@ def run(conn_str):
         )
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
-            cursor.execute("USE MarketIntelligenceDWH")
             cursor.executemany(
                 """
                 INSERT INTO bronze.IBM_stock_price ([date], [open], [high], [low], [close], [volume])
