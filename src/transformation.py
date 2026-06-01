@@ -60,7 +60,7 @@ def _transform(df: pd.DataFrame) -> pd.DataFrame:
 
     
 
-    #Derived features
+    #Yeti for gold layer views ko laig 
     # Derived features
     # df["daily_return"]   = df["close"].pct_change().round(6)
     # df["daily_range"]    = (df["high"] - df["low"]).round(4)
