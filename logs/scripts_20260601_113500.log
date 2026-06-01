@@ -1,0 +1,68 @@
+2026-06-01 11:35:01,431 - INFO -Batch 1:
+USE master;
+
+2026-06-01 11:35:01,431 - INFO -Batch 1 OK
+2026-06-01 11:35:01,431 - INFO -Batch 2:
+IF EXISTS(SELECT 1 FROM sys.databases WHERE name = 'MarketIntelligenceDWH')
+BEGIN
+    ALTER DATABASE MarketIntelligenceDWH
+    SET SINGLE_USER
+    WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE MarketIntelligenceDWH;
+END;
+CREATE DATABASE MarketIntelligenceDWH;
+
+2026-06-01 11:35:01,849 - INFO -Batch 2 OK
+2026-06-01 11:35:01,849 - INFO -Batch 3:
+USE MarketIntelligenceDWH;
+
+2026-06-01 11:35:01,850 - INFO -Batch 3 OK
+2026-06-01 11:35:01,850 - INFO -Batch 4:
+CREATE SCHEMA bronze;
+
+2026-06-01 11:35:01,852 - INFO -Batch 4 OK
+2026-06-01 11:35:01,852 - INFO -Batch 5:
+CREATE SCHEMA silver;
+
+2026-06-01 11:35:01,855 - INFO -Batch 5 OK
+2026-06-01 11:35:01,855 - INFO -Batch 6:
+CREATE SCHEMA gold;
+
+2026-06-01 11:35:01,857 - INFO -Batch 6 OK
+2026-06-01 11:35:01,857 - INFO -All batches executed successfully.
+2026-06-01 11:35:02,130 - INFO -Batch 1:
+IF OBJECT_ID('bronze.IBM_stock_price', 'U') IS NOT NULL
+    DROP TABLE bronze.IBM_stock_price;
+
+2026-06-01 11:35:02,131 - INFO -Batch 1 OK
+2026-06-01 11:35:02,131 - INFO -Batch 2:
+CREATE TABLE bronze.IBM_stock_price (
+    [date] NVARCHAR(50),
+    [open] NVARCHAR(50),
+    [high] NVARCHAR(50),
+    [low] NVARCHAR(50),
+    [close] NVARCHAR(50),
+    [volume] NVARCHAR(50)
+);
+
+2026-06-01 11:35:02,134 - INFO -Batch 2 OK
+2026-06-01 11:35:02,134 - INFO -All batches executed successfully.
+2026-06-01 11:35:02,811 - INFO -Batch 1:
+IF OBJECT_ID('silver.IBM_stock_price', 'U') IS NOT NULL
+    DROP TABLE silver.IBM_stock_price;
+
+2026-06-01 11:35:02,812 - INFO -Batch 1 OK
+2026-06-01 11:35:02,812 - INFO -Batch 2:
+CREATE TABLE silver.IBM_stock_price(   
+    [date]          DATE        NOT NULL,       
+    [open]          FLOAT       NOT NULL,
+    [high]          FLOAT       NOT NULL,
+    [low]           FLOAT       NOT NULL,
+    [close]         FLOAT       NOT NULL,
+    [volume]        BIGINT      NOT NULL,
+    dwh_create_date DATETIME2 DEFAULT GETDATE(),
+    PRIMARY KEY([date])
+);
+
+2026-06-01 11:35:02,814 - INFO -Batch 2 OK
+2026-06-01 11:35:02,814 - INFO -All batches executed successfully.

@@ -1,0 +1,17 @@
+2026-06-01 11:34:38,650 - INFO -Starting Datawarehouse setup...
+2026-06-01 11:34:38,650 - INFO -Running: init_database
+2026-06-01 11:34:39,395 - INFO -Completed: init_database
+2026-06-01 11:34:39,395 - INFO -Running: bronze_table
+2026-06-01 11:34:39,584 - INFO -Completed: bronze_table
+2026-06-01 11:34:39,584 - INFO -Ingesting: data into Bronze layer
+2026-06-01 11:34:40,969 - INFO -Running: silver_table
+2026-06-01 11:34:40,973 - INFO -Completed: silver_table
+2026-06-01 11:34:40,973 - INFO -Transformation: transformation data into Silver layer
+2026-06-01 11:34:41,419 - ERROR -Script failed: name 'engine' is not defined
+Traceback (most recent call last):
+  File "/home/bishalkoirala/Desktop/MarketIntelligence/runner.py", line 59, in <module>
+    data_transformation_run(conn_str)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/bishalkoirala/Desktop/MarketIntelligence/src/transformation.py", line 26, in data_transformation_run
+    engine
+NameError: name 'engine' is not defined

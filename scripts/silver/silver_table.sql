@@ -9,6 +9,7 @@ CREATE TABLE silver.IBM_stock_price(
     [low]           FLOAT       NOT NULL,
     [close]         FLOAT       NOT NULL,
     [volume]        BIGINT      NOT NULL,
-    dwh_create_date DATETIME2 DEFAULT GETDATE()
-    PRIMARY KEY([date]),
+    dwh_create_date DATETIME2 DEFAULT GETDATE(),
+    PRIMARY KEY([date])
 );
+GO

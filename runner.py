@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
 
         # Bronze layer - ingestion
-        log.info("Ingestining: data into Bronze layer")
+        log.info("Ingesting: data into Bronze layer")
         data_ingestion_run(conn_str)
 
 

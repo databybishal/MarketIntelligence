@@ -1,7 +1,8 @@
 import os 
 import sys
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 import pyodbc
-import logging
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -10,6 +11,7 @@ from utils.log import transformation_logger as log
 def data_transformation_run(conn_str):
     try:
         log.info("Data fetching from bronze layer")
+
         with pyodbc.connect(conn_str) as conn:
             df = pd.read_sql(
                 """

@@ -16,6 +16,14 @@ def data_ingestion_run(conn_str):
     try:
         log.info("Fetching data from API source")
         data = extractApis(api)
+
+        #if any case apis cause the problem
+        if not data:
+            raise ValueError("extractApis() returned empty — check API key or network")
+
+        if 'Time Series (Daily)' not in data:
+            raise ValueError(f"Unexpected API response structure: {list(data.keys())}")
+        
         time_series = data['Time Series (Daily)']
         df = pd.DataFrame(
             [
@@ -32,6 +40,7 @@ def data_ingestion_run(conn_str):
         )
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
+            cursor.execute("TRUNCATE TABLE bronze.IBM_stock_price;")
             cursor.executemany(
                 """
                 INSERT INTO bronze.IBM_stock_price ([date], [open], [high], [low], [close], [volume])

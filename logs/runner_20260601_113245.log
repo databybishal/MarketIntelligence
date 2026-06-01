@@ -1,0 +1,21 @@
+2026-06-01 11:32:45,747 - INFO -Starting Datawarehouse setup...
+2026-06-01 11:32:45,747 - INFO -Running: init_database
+2026-06-01 11:32:49,386 - INFO -Completed: init_database
+2026-06-01 11:32:49,387 - INFO -Running: bronze_table
+2026-06-01 11:32:49,818 - INFO -Completed: bronze_table
+2026-06-01 11:32:49,818 - INFO -Ingesting: data into Bronze layer
+2026-06-01 11:32:51,271 - INFO -Running: silver_table
+2026-06-01 11:32:51,274 - INFO -Completed: silver_table
+2026-06-01 11:32:51,274 - INFO -Transformation: transformation data into Silver layer
+2026-06-01 11:32:52,098 - ERROR -Script failed: ('42S02', '[42S02] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Cannot find the object "IBM_stock_price" because it does not exist or you do not have permissions. (4701) (SQLExecDirectW)')
+Traceback (most recent call last):
+  File "/home/bishalkoirala/Desktop/MarketIntelligence/runner.py", line 59, in <module>
+    data_transformation_run(conn_str)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/bishalkoirala/Desktop/MarketIntelligence/src/transformation.py", line 36, in data_transformation_run
+    _load_to_silver(df, conn)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/bishalkoirala/Desktop/MarketIntelligence/src/transformation.py", line 76, in _load_to_silver
+    cursor.execute("TRUNCATE TABLE silver.IBM_stock_price")
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pyodbc.ProgrammingError: ('42S02', '[42S02] [Microsoft][ODBC Driver 18 for SQL Server][SQL Server]Cannot find the object "IBM_stock_price" because it does not exist or you do not have permissions. (4701) (SQLExecDirectW)')
