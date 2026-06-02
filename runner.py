@@ -2,6 +2,7 @@ from utils.log import runner_logger as log
 from src import DATABASE_CONFIG, execute_sql_file
 from src.data_ingestion import data_ingestion_run
 from src.silver_layer_transformation import silver_layer_data_transformation_run
+from src.gold_layer_transformation import gold_layer_tranformation_run
 from datetime import datetime
 
 
@@ -59,6 +60,10 @@ if __name__ == '__main__':
         silver_layer_data_transformation_run(conn_str)
         log.info("Completed: Transformation silver layer")
 
+        #Gold layer - aggregation and view of gold layer
+        log.info("Agregation and View: Agregating and created view into gold layer")
+        gold_layer_tranformation_run(conn_str)
+        log.info("Completed: Agregation and created view in gold layer")
 
         log.info("All scripts completed successfully")
     except Exception as e:
