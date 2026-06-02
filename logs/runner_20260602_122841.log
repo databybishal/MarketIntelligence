@@ -1,0 +1,13 @@
+2026-06-02 12:28:41,365 - INFO -Starting Datawarehouse setup...
+2026-06-02 12:28:41,366 - INFO -Running: init_database
+2026-06-02 12:28:45,145 - INFO -Completed: init_database
+2026-06-02 12:28:45,145 - INFO -Running: bronze_table
+2026-06-02 12:28:45,436 - INFO -Completed: bronze_table
+2026-06-02 12:28:45,436 - INFO -Ingesting: data into Bronze layer
+2026-06-02 12:28:46,722 - INFO -Running: silver_table
+2026-06-02 12:28:46,725 - INFO -Completed: silver_table
+2026-06-02 12:28:46,725 - INFO -Transformation: transformation data into Silver layer
+2026-06-02 12:28:46,954 - INFO -Completed: Transformation silver layer
+2026-06-02 12:28:46,954 - INFO -Agregation and View: Agregating and created view into gold layer
+2026-06-02 12:28:46,960 - INFO -Completed: Agregation and created view in gold layer
+2026-06-02 12:28:46,960 - INFO -All scripts completed successfully
