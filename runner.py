@@ -1,7 +1,7 @@
 from utils.log import runner_logger as log
 from src import DATABASE_CONFIG, execute_sql_file
 from src.data_ingestion import data_ingestion_run
-from src.transformation import data_transformation_run
+from src.silver_layer_transformation import silver_layer_data_transformation_run
 from datetime import datetime
 
 
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
         # Silver layer - transformation
         log.info("Transformation: transformation data into Silver layer")
-        data_transformation_run(conn_str)
+        silver_layer_data_transformation_run(conn_str)
         log.info("Completed: Transformation silver layer")
 
 

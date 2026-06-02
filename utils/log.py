@@ -7,7 +7,7 @@ log_dir = "logs"
 os.makedirs(log_dir, exist_ok=True)
 
 def cleanup_logs(keep=5):
-    for prefix in ["runner", "scripts", "ingestion", "transformation"]:
+    for prefix in ["runner", "scripts", "ingestion", "silver_layer_transformation", "gold_layer_transformation"]:
         files = sorted(glob.glob(os.path.join(log_dir, f"{prefix}_*.log")))
         for f in files[:-keep]:
             os.remove(f)
@@ -43,8 +43,18 @@ ingestion_logger.addHandler(logging.StreamHandler())
 ingestion_logger.propagate = False
 
 #transformation logger
-transformation_logger = logging.getLogger("transformation")
-transformation_logger.setLevel(logging.INFO)
-transformation_logger.addHandler(_file_handler(f"transformation_{today}.log"))
-transformation_logger.addHandler(logging.StreamHandler())
-transformation_logger.propagate = False
+silver_transformation_logger = logging.getLogger("silver_layer_transformation")
+silver_transformation_logger.setLevel(logging.INFO)
+silver_transformation_logger.addHandler(_file_handler(f"silver_transformation_{today}.log"))
+silver_transformation_logger.addHandler(logging.StreamHandler())
+silver_transformation_logger.propagate = False
+
+
+#transformation logger
+gold_layer_transformation_logger = logging.getLogger("gold_layer_transformation")
+gold_layer_transformation_logger.setLevel(logging.INFO)
+gold_layer_transformation_logger.addHandler(_file_handler(f"gold_layer_transformation_{today}.log"))
+gold_layer_transformation_logger.addHandler(logging.StreamHandler())
+gold_layer_transformation_logger.propagate = False
+
+#

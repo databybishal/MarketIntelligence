@@ -1,6 +1,0 @@
-2026-06-01 11:34:40,973 - INFO -Data fetching from bronze layer
-2026-06-01 11:34:41,418 - ERROR -Transformation failed: name 'engine' is not defined
-Traceback (most recent call last):
-  File "/home/bishalkoirala/Desktop/MarketIntelligence/src/transformation.py", line 26, in data_transformation_run
-    engine
-NameError: name 'engine' is not defined
