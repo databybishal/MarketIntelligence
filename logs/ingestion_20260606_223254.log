@@ -1,0 +1,2 @@
+2026-06-06 22:32:56,948 - INFO -Fetching data from API source
+2026-06-06 22:32:58,635 - INFO -Ingested 100 rows into bronze.IBM_stock_price
