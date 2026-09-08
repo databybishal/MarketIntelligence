@@ -8,7 +8,10 @@ database = os.getenv('DATABASE')
 username = os.getenv('DB_USERNAME')
 password = os.getenv("MSSQL_SA_PASSWORD")
 driver = os.getenv('DRIVER')
-# print(server, port, database, username, password, driver) # for check
+api_key = os.getenv('ALPHA_VANTAGE_API_KEY')
+symbol = os.getenv('STOCK_PRICE_API_SYMBOL', 'IBM')
+interval = os.getenv('STOCK_PRICE_API_INTERVAL', '5min')
+function = os.getenv('STOCK_PRICE_API_FUNCTION', 'TIME_SERIES_DAILY')
 
 DATABASE_CONFIG = {
     "mssql-database": {
@@ -17,7 +20,11 @@ DATABASE_CONFIG = {
         'database': database,
         'username': username,
         'password': password,
-        'driver': driver
+        'driver': driver,
+        'api_key': api_key,
+        'symbol': symbol,
+        'interval': interval,
+        'function': function,
     },
 }
 # print(DATABASE_CONFIG['mssql-database']) #for check

@@ -1,15 +1,11 @@
-import os
-import sys
-import logging
-import pandas as pd
-from .apiSource.data_source import source
 import pyodbc
-
-# Add project root to path so apiSource can be found
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import pandas as pd
+from src.apiSource.data_source import source
 from utils import extractApis 
 from utils.log import ingestion_logger as log
+from src.config import DATABASE_CONFIG
 
+symbol = DATABASE_CONFIG['mssql-database'].get('symbol', 'IBM')
 api = source['stock_price_apis']['api']
 
 def data_ingestion_run(conn_str):
@@ -17,7 +13,6 @@ def data_ingestion_run(conn_str):
         log.info("Fetching data from API source")
         data = extractApis(api)
 
-        #if any case apis cause the problem
         if not data:
             raise ValueError("extractApis() returned empty — check API key or network")
 
@@ -40,16 +35,16 @@ def data_ingestion_run(conn_str):
         )
         with pyodbc.connect(conn_str) as conn:
             cursor = conn.cursor()
-            cursor.execute("TRUNCATE TABLE bronze.IBM_stock_price;")
+            cursor.execute(f"TRUNCATE TABLE bronze.{symbol}_stock_price;")
             cursor.executemany(
                 """
-                INSERT INTO bronze.IBM_stock_price ([date], [open], [high], [low], [close], [volume])
+                INSERT INTO bronze.{symbol}_stock_price ([date], [open], [high], [low], [close], [volume])
                 VALUES(?, ?, ?, ?, ?, ?)
-                """,
+                """.format(symbol=symbol),
                 df.values.tolist()
             )
             conn.commit()
-        log.info(f"Ingested {len(df)} rows into bronze.IBM_stock_price")
+        log.info(f"Ingested {len(df)} rows into bronze.{symbol}_stock_price")
     except Exception as e:
         log.exception(f"Ingestion failed: {e}")
         raise

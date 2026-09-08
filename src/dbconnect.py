@@ -1,18 +1,20 @@
 import pyodbc
 import logging
 import re
+from pathlib import Path
 from utils.removeSqlComments import remove_sql_comments
 
 log = logging.getLogger("script") 
 
 
 def execute_sql_file(conn_str, sql_file_path):
-    try:
-        with open(sql_file_path, 'r', encoding='utf-8') as file:
-            sql_script = file.read()
-    except FileNotFoundError as e:
-        log.error(f"File not found: {sql_file_path} - {e}")
-        return
+    sql_path = Path(sql_file_path)
+    if not sql_path.is_file():
+        log.error(f"File not found: {sql_file_path}")
+        raise FileNotFoundError(f"SQL file not found: {sql_file_path}")
+    
+    with open(sql_path, 'r', encoding='utf-8') as file:
+        sql_script = file.read()
     
     sql_script = remove_sql_comments(sql_script)
     batches = re.split(r'^\s*GO\s*$', sql_script, flags=re.IGNORECASE | re.MULTILINE)  

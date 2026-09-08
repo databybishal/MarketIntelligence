@@ -1,2 +1,12 @@
-echo ".env"
 .env
+.env.example
+logs/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+build/
+dist/
+*.db
+*.sqlite
+*.md.bak

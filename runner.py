@@ -2,9 +2,7 @@ from utils.log import runner_logger as log
 from src import DATABASE_CONFIG, execute_sql_file
 from src.data_ingestion import data_ingestion_run
 from src.silver_layer_transformation import silver_layer_data_transformation_run
-from src.gold_layer_transformation import gold_layer_tranformation_run
-from datetime import datetime
-
+from src.gold_layer_transformation import gold_layer_transformation_run
 
 
 mssql_db = DATABASE_CONFIG['mssql-database']
@@ -21,13 +19,14 @@ conn_str = (
 SQL_SCRIPTS = {
     'init_database': './scripts/init_database.sql',
     'bronze_table': './scripts/bronze/bronze_tables.sql',
-    'silver_table': './scripts/silver/silver_table.sql'
+    'silver_table': './scripts/silver/silver_table.sql',
+    'gold_view': './scripts/gold/gold_view.sql'
 }
 
 
 if __name__ == '__main__':
     log.info("Starting Datawarehouse setup...")
-        
+
     try:
         # Init Database
         log.info("Running: init_database")
@@ -37,20 +36,16 @@ if __name__ == '__main__':
         execute_sql_file(master_conn_str, SQL_SCRIPTS['init_database'])
         log.info("Completed: init_database")
 
-
-
-        #Bronze layer - DDL
+        # Bronze layer - DDL
         log.info("Running: bronze_table")
         execute_sql_file(conn_str, SQL_SCRIPTS['bronze_table'])
         log.info("Completed: bronze_table")
-
 
         # Bronze layer - ingestion
         log.info("Ingesting: data into Bronze layer")
         data_ingestion_run(conn_str)
 
-
-        #Silver layer - DDL
+        # Silver layer - DDL
         log.info("Running: silver_table")
         execute_sql_file(conn_str, SQL_SCRIPTS['silver_table'])
         log.info("Completed: silver_table")
@@ -60,22 +55,13 @@ if __name__ == '__main__':
         silver_layer_data_transformation_run(conn_str)
         log.info("Completed: Transformation silver layer")
 
-        #Gold layer - aggregation and view of gold layer
-        log.info("Agregation and View: Agregating and created view into gold layer")
-        gold_layer_tranformation_run(conn_str)
-        log.info("Completed: Agregation and created view in gold layer")
+        # Gold layer - view
+        log.info("Creating gold layer view")
+        execute_sql_file(conn_str, SQL_SCRIPTS['gold_view'])
+        log.info("Completed: gold layer view")
 
         log.info("All scripts completed successfully")
     except Exception as e:
         log.error(f"Script failed: {e}", exc_info=True)
         raise
-
-    
-
-        
-
-
-
-
-
 

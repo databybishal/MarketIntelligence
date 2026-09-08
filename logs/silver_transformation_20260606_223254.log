@@ -1,5 +1,0 @@
-2026-06-06 22:32:58,649 - INFO -Data fetching from bronze layer
-2026-06-06 22:32:59,151 - INFO -Fetched 100 rows from bronze layer
-2026-06-06 22:32:59,178 - INFO -Transformation completed
-2026-06-06 22:32:59,258 - INFO -Inserted 100 rows into silver.IBM_stock_price
-2026-06-06 22:32:59,259 - INFO -Data loaded to silver layer successfully

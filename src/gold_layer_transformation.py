@@ -1,13 +1,7 @@
-import os 
-import sys
 import pyodbc
-import pandas as pd
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils.log import gold_layer_transformation_logger as log
 
-
-def gold_layer_tranformation_run(conn_str):
+def gold_layer_transformation_run(conn_str):
     try:
         log.info("Data fetching from silver layer")
         with pyodbc.connect(conn_str) as conn:
@@ -22,7 +16,6 @@ def _create_view_gold(conn: pyodbc.Connection) -> None:
     cursor = conn.cursor()
     log.info("Creating gold layer view")
 
-    #Drop if exists
     cursor.execute(
         """
             IF OBJECT_ID('gold.fact_IBM_stock_price', 'V') IS NOT NULL
@@ -31,7 +24,6 @@ def _create_view_gold(conn: pyodbc.Connection) -> None:
     )
     conn.commit()
 
-    # Create views
     cursor.execute(
         """
         CREATE VIEW gold.fact_IBM_stock_price AS
@@ -45,9 +37,9 @@ def _create_view_gold(conn: pyodbc.Connection) -> None:
                 ROUND(([high] - [low]), 4) AS daily_range,
                 ROUND(
                         ISNULL(
-                            ([close] - LAG([close]) OVER(ORDER BY DATE)) / 
+                            ([close] - LAG([close]) OVER(ORDER BY [date])) / 
                             NULLIF(
-                                LAG([close]) OVER(ORDER BY date), 
+                                LAG([close]) OVER(ORDER BY [date]), 
                             0), 
                         0), 
                     6)  AS   daily_return,
