@@ -15,7 +15,7 @@ services:
     volumes:
       - mssql-data:/var/opt/mssql
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P '$$(echo $$MSSQL_SA_PASSWORD)' -C -Q 'SELECT 1' || exit 1"]
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/localhost/1433 && exec 3<&-' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 30
@@ -31,17 +31,19 @@ services:
     env_file:
       - .env
     environment:
-      MSSQL_SERVER: localhost
-      MSSQL_PORT: "1433"
-      MSSQL_USERNAME: sa
+      SERVER: mssql-server
+      PORT: "1433"
+      DATABASE: ${DATABASE:-MarketIntelligenceDWH}
+      DB_USERNAME: sa
       MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      ALPHA_VANTAGE_API_KEY: ${ALPHA_VANTAGE_API_KEY}
+      STOCK_PRICE_API_SYMBOL: ${STOCK_PRICE_API_SYMBOL:-IBM}
+      STOCK_PRICE_API_INTERVAL: ${STOCK_PRICE_API_INTERVAL:-5min}
+      STOCK_PRICE_API_FUNCTION: ${STOCK_PRICE_API_FUNCTION:-TIME_SERIES_DAILY}
     volumes:
       - ./logs:/app/logs
     command: ["bash", "-c", "./wait_for_mssql.sh && python runner.py"]
     restart: "no"
-    depends_on:
-      mssql-server:
-        condition: service_healthy
 
 volumes:
   mssql-data:
